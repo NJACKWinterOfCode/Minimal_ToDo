@@ -135,7 +135,7 @@ class NewToDoFragment : Fragment() {
                     WorkManager.getInstance().enqueue(notifyManager)
                 }
                 replyIntent.putExtra("tag", tag)
-                wordViewModel.insert(Word(task, tm, tag))
+                wordViewModel.insert(Word(task, tm, tag,false))
                 fragmentManager?.popBackStack()
                 closeKeyboard()
 
