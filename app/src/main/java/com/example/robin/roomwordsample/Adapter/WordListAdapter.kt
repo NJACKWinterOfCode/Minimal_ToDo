@@ -79,7 +79,6 @@ class WordListAdapter internal constructor(
     fun getList() = words
 
     private fun toggleCompletion(task: String, mark: Boolean){
-        // Toast.makeText(ctx,task+" marked as "+(if (mark) "complete" else "incomplete"),Toast.LENGTH_SHORT).show()
         wordViewModel.markAsComplete(task, mark)
     }
 
