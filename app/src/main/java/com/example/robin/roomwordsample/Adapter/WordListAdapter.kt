@@ -5,8 +5,10 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.RelativeLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import androidx.work.WorkManager
 import com.example.robin.roomwordsample.Data.Word
@@ -42,6 +44,7 @@ class WordListAdapter internal constructor(
         val timeItemView: TextView = itemView.findViewById(R.id.time)
         val avImageView: AvatarImageView = itemView.findViewById(R.id.TxtImg)
         val relcard: RelativeLayout = itemView.findViewById(R.id.relcard)
+        val markAsComplete: CheckBox = itemView.findViewById(R.id.markAsComplete)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WordViewHolder {
@@ -55,6 +58,11 @@ class WordListAdapter internal constructor(
         holder.timeItemView.text = current.time
         holder.avImageView.setText(current.word.toCharArray()[0] + "")
         holder.avImageView.avatarBackgroundColor = colors[Random.nextInt(0, 8)]
+        holder.markAsComplete.setOnCheckedChangeListener{
+                _, isChecked -> if(isChecked){
+            Toast.makeText(ctx,isChecked.toString(),Toast.LENGTH_SHORT).show()
+        }
+        }
     }
 
     internal fun setWords(words: List<Word>, ctx: Context?, wordViewModel: WordViewModel, view: View) {
