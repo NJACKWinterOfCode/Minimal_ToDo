@@ -7,7 +7,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.PorterDuff
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
@@ -40,12 +39,14 @@ class NewToDoFragment : Fragment() {
     var hr = 0
     var min = 0
     private lateinit var wordViewModel: WordViewModel
-    val colors = resources.getStringArray(R.array.colors)
+    lateinit var colors: Array<String>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        colors = resources.getStringArray(R.array.colors)
         // Inflate the layout for this fragment
         val binding = DataBindingUtil.inflate<FragmentNewToDoBinding>(
             inflater,
@@ -67,8 +68,6 @@ class NewToDoFragment : Fragment() {
         binding.userToDoEditText.requestFocus()
 
 //       showKeyboard()
-        val appSharedPrefs = PreferenceManager
-            .getDefaultSharedPreferences(context?.applicationContext)
 
         wordViewModel = ViewModelProviders.of(this).get(WordViewModel::class.java)
         binding.HasRemind.setOnCheckedChangeListener { _, isChecked ->
@@ -133,9 +132,9 @@ class NewToDoFragment : Fragment() {
 //                replyIntent.putExtra(NewWordActivity.EXTRA_REPLY, task)
                 replyIntent.putExtra("Time", tm)
                 if (checked) {
-                    val prefsEditor = appSharedPrefs.edit()
-                    prefsEditor.putString("Task", binding.userToDoEditText.text.toString())
-                    prefsEditor.apply()
+                    val taskName = binding.userToDoEditText.text.toString()
+                    wordViewModel.addTask(taskName)
+
                     val c = Calendar.getInstance()
                     c.set(year, month, day, hr, min)
                     c.set(Calendar.SECOND, 0)
@@ -174,6 +173,7 @@ class NewToDoFragment : Fragment() {
 //        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
 //    }
 //
+
     fun closeKeyboard() {
         val inputMethodManager =
             context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
