@@ -3,7 +3,6 @@ package com.example.robin.roomwordsample.fragments
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
-import android.content.Context
 import android.content.Intent
 import android.graphics.PorterDuff
 import android.os.Bundle
@@ -11,7 +10,6 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -22,6 +20,7 @@ import com.example.robin.roomwordsample.Data.Word
 import com.example.robin.roomwordsample.Data.WordViewModel
 import com.example.robin.roomwordsample.R
 import com.example.robin.roomwordsample.Utils.notify
+import com.example.robin.roomwordsample.Utils.utils
 import com.example.robin.roomwordsample.databinding.FragmentNewToDoBinding
 import com.google.android.material.snackbar.Snackbar
 import java.text.SimpleDateFormat
@@ -67,7 +66,6 @@ class NewToDoFragment : Fragment() {
 
         binding.userToDoEditText.requestFocus()
 
-//       showKeyboard()
 
         wordViewModel = ViewModelProviders.of(this).get(WordViewModel::class.java)
         binding.HasRemind.setOnCheckedChangeListener { _, isChecked ->
@@ -157,28 +155,18 @@ class NewToDoFragment : Fragment() {
                         tag,
                         false,
                         description,
-                        colors[Random.nextInt(0, colors.size-1)]
+                        colors[Random.nextInt(0, colors.size - 1)]
                     )
                 )
                 fragmentManager?.popBackStack()
-                closeKeyboard()
+                utils.closeKeyboard(context!!)
 
             }
         }
         return binding.root
     }
-
-    //    fun showKeyboard() {
-//        val inputMethodManager = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-//        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
-//    }
-//
-
-    fun closeKeyboard() {
-        val inputMethodManager =
-            context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
-    }
+  
+  
 
 
 }
