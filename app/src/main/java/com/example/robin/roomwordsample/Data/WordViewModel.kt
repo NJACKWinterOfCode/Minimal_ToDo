@@ -3,6 +3,7 @@ package com.example.robin.roomwordsample.Data
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import com.example.robin.roomwordsample.localdb.LocalDB
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
@@ -15,6 +16,8 @@ class WordViewModel(application: Application) : AndroidViewModel(Application()) 
 
     private val repository: WordRepository
     val allWords: LiveData<List<Word>>
+
+    val prefs = LocalDB(application)
 
     init {
         val wordsDao = WordRoomDatabase.getDatabase(application, scope).wordDao()
@@ -33,6 +36,15 @@ class WordViewModel(application: Application) : AndroidViewModel(Application()) 
     fun markAsComplete(id: Int, mark: Boolean) = scope.launch(Dispatchers.IO) {
         repository.toggleCompletion(id, mark)
     }
+
+    fun getTask(): String {
+        return prefs.getTask()
+    }
+
+    fun addTask(value: String) {
+        prefs.addTask(value)
+    }
+
 
     override fun onCleared() {
         super.onCleared()

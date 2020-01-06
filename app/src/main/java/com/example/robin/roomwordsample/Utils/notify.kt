@@ -8,12 +8,12 @@ import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
 import android.graphics.Color
 import android.os.Looper
-import android.preference.PreferenceManager
 import androidx.core.app.NotificationCompat
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.example.robin.roomwordsample.Activity.MainActivity
 import com.example.robin.roomwordsample.R
+import com.example.robin.roomwordsample.localdb.LocalDB
 
 class notify(ctx: Context, params: WorkerParameters) : Worker(ctx, params) {
 
@@ -22,8 +22,7 @@ class notify(ctx: Context, params: WorkerParameters) : Worker(ctx, params) {
 
     override fun doWork(): Result {
         Looper.prepare()
-        val appSharedPrefs = PreferenceManager
-            .getDefaultSharedPreferences(this.applicationContext)
+        val appSharedPrefs = LocalDB(this.applicationContext)
         val notificationManager =
             applicationContext.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
@@ -32,9 +31,8 @@ class notify(ctx: Context, params: WorkerParameters) : Worker(ctx, params) {
             notificationManager.createNotificationChannel(notificationChannel)
         }
 
-        if (appSharedPrefs.contains("Task")) {
-            task = appSharedPrefs.getString("Task", " ").toString()
-        }
+        task = appSharedPrefs.getTask()
+
         val intent = Intent(applicationContext, MainActivity::class.java)
         val pi = PendingIntent.getActivity(
             applicationContext,
